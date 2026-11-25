@@ -2,7 +2,7 @@
 setlocal
 
 set SERVICE_NAME=PRODUCTOS_SINVENTA
-set SERVICE_DISPLAY_NAME=CBFProductosSinVenta
+set SERVICE_DISPLAY_NAME=CBF_ProductosSinVenta
 set SERVICE_DESCRIPTION=Consulta diariamente lotes sin venta y envia correo si la rutina y suscriptores estan habilitados.
 set SERVICE_EXE=%~dp0PRODUCTOS_SINVENTA.exe
 

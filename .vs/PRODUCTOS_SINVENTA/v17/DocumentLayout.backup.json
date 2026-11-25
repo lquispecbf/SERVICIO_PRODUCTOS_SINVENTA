@@ -1,41 +1,41 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\",
+  "WorkspaceRootPath": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\instalar.bat||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\instalar.bat||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:instalar.bat||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\services\\emailsenderproductos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\services\\emailsenderproductos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:services\\emailsenderproductos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\sql.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\sql.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:sql.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\configuracion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\configuracion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:configuracion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\reporteproductos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\reporteproductos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:reporteproductos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|c:\\app consola\\productos_sinventa\\consultaproductosservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|d:\\1. gestion cbf\\proyectos\\servicio_productos_sinventa\\consultaproductosservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F3478D-8512-472A-9819-4BDDC7AC2B2A}|PRODUCTOS_SINVENTA.csproj|solutionrelative:consultaproductosservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -52,11 +52,11 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\appsettings.json",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\appsettings.json",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2026-11-06T20:30:37.623Z",
               "IsPinned": true,
@@ -66,11 +66,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "instalar.bat",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\instalar.bat",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\instalar.bat",
               "RelativeDocumentMoniker": "instalar.bat",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\instalar.bat",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\instalar.bat",
               "RelativeToolTip": "instalar.bat",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000614|",
               "WhenOpened": "2026-11-13T21:23:07.491Z",
               "EditorCaption": ""
@@ -79,22 +79,21 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "EmailSenderProductos.cs",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Services\\EmailSenderProductos.cs",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Services\\EmailSenderProductos.cs",
               "RelativeDocumentMoniker": "Services\\EmailSenderProductos.cs",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Services\\EmailSenderProductos.cs",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Services\\EmailSenderProductos.cs",
               "RelativeToolTip": "Services\\EmailSenderProductos.cs",
               "ViewState": "AgIAALkAAAAAAAAAAAAAwMoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-07T16:18:55.569Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-11-07T16:18:55.569Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "SQL.sql",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\SQL.sql",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\SQL.sql",
               "RelativeDocumentMoniker": "SQL.sql",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\SQL.sql",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\SQL.sql",
               "RelativeToolTip": "SQL.sql",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
               "WhenOpened": "2026-11-07T17:55:13.541Z"
@@ -103,9 +102,9 @@
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "ConsultaProductosService.cs",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\ConsultaProductosService.cs",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\ConsultaProductosService.cs",
               "RelativeDocumentMoniker": "ConsultaProductosService.cs",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\ConsultaProductosService.cs",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\ConsultaProductosService.cs",
               "RelativeToolTip": "ConsultaProductosService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAEsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -115,9 +114,9 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "ReporteProductos.cs",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\ReporteProductos.cs",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\ReporteProductos.cs",
               "RelativeDocumentMoniker": "ReporteProductos.cs",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\ReporteProductos.cs",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\ReporteProductos.cs",
               "RelativeToolTip": "ReporteProductos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -127,9 +126,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "Worker.cs",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Worker.cs",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Worker.cs",
               "RelativeDocumentMoniker": "Worker.cs",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Worker.cs",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Worker.cs",
               "RelativeToolTip": "Worker.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAGEAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -139,9 +138,9 @@
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "Configuracion.cs",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Configuracion.cs",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Configuracion.cs",
               "RelativeDocumentMoniker": "Configuracion.cs",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Configuracion.cs",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Configuracion.cs",
               "RelativeToolTip": "Configuracion.cs",
               "ViewState": "AgIAAB4AAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -151,23 +150,13 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Program.cs",
+              "DocumentMoniker": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\APP CONSOLA\\PRODUCTOS_SINVENTA\\Program.cs",
+              "ToolTip": "D:\\1. GESTION CBF\\PROYECTOS\\SERVICIO_PRODUCTOS_SINVENTA\\Program.cs",
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-11-06T19:39:02.082Z"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 1142,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }
