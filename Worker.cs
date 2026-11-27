@@ -24,6 +24,7 @@ public sealed class Worker : BackgroundService
     private readonly ConfiguracionRutina _rutina;
     private readonly string _directorioMarcas;
     private readonly HashSet<DateOnly> _fechasIntentadas = new();
+    private readonly HashSet<DateOnly> _marcasDiariasObservadas = new();
     private ConfiguracionRutinaDTO? _configuracionRutinaActual;
     private int? _versionConfiguracionActual;
     private DateTime _ultimaConsultaConfiguracion = DateTime.MinValue;
@@ -138,10 +139,27 @@ public sealed class Worker : BackgroundService
             var marcaHoy = ObtenerRutaMarca(fechaLocal);
             var esPrimeraRevision = primeraRevision;
             primeraRevision = false;
+            var existeMarcaHoy = File.Exists(marcaHoy);
+            var reenvioSolicitado = _fechasIntentadas.Contains(fechaLocal)
+                && _marcasDiariasObservadas.Contains(fechaLocal)
+                && !existeMarcaHoy;
 
-            if (_fechasIntentadas.Contains(fechaLocal) || File.Exists(marcaHoy))
+            if (reenvioSolicitado)
+            {
+                _fechasIntentadas.Remove(fechaLocal);
+                _marcasDiariasObservadas.Remove(fechaLocal);
+                proximaEjecucionAnunciada = null;
+                _logger.LogWarning(
+                    "Se eliminó la marca diaria de {Fecha}; se volverá a ejecutar el ciclo ahora.",
+                    fechaLocal.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            }
+
+            if (_fechasIntentadas.Contains(fechaLocal) || existeMarcaHoy)
             {
                 _fechasIntentadas.Add(fechaLocal);
+                if (existeMarcaHoy)
+                    _marcasDiariasObservadas.Add(fechaLocal);
+
                 var proxima = ahora.Date.AddDays(1).Add(horaEjecucion.ToTimeSpan());
                 if (proximaEjecucionAnunciada != proxima)
                 {
@@ -153,7 +171,7 @@ public sealed class Worker : BackgroundService
                     proximaEjecucionAnunciada = proxima;
                 }
             }
-            else if (esPrimeraRevision || ahora >= horaProgramadaHoy)
+            else if (esPrimeraRevision || ahora >= horaProgramadaHoy || reenvioSolicitado)
             {
                 _fechasIntentadas.Add(fechaLocal);
                 if (!IntentarCrearMarca(marcaHoy, ahora))
@@ -162,9 +180,14 @@ public sealed class Worker : BackgroundService
                     continue;
                 }
 
+                if (File.Exists(marcaHoy))
+                    _marcasDiariasObservadas.Add(fechaLocal);
+
                 proximaEjecucionAnunciada = null;
                 _logger.LogInformation(
-                    esPrimeraRevision
+                    reenvioSolicitado
+                        ? "Se solicitó repetir la ejecución de {Fecha} al eliminar su marca diaria. Fecha de referencia: {FechaReferencia}."
+                        : esPrimeraRevision
                         ? "No existe marca para {Fecha}; se hará la ejecución inicial ahora. Fecha de referencia: {FechaReferencia}."
                         : "No existe marca para {Fecha}; se alcanzó la hora programada. Fecha de referencia: {FechaReferencia}.",
                     fechaLocal.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
@@ -319,7 +342,7 @@ public sealed class Worker : BackgroundService
                 throw new InvalidOperationException("DIAS_ATRAS de la rutina debe ser cero o un número positivo.");
 
             _logger.LogInformation(
-                "Consultando lotes admitidos hace {Dias} día(s), usando fecha de referencia local {FechaReferencia}...",
+                "Consultando artículos con stock disponible y sin ventas en los últimos {Dias} día(s), usando fecha de referencia local {FechaReferencia}...",
                 diasAtras,
                 fechaReferencia.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
@@ -342,7 +365,7 @@ public sealed class Worker : BackgroundService
                 {
                     var detalleJson = JsonSerializer.Serialize(filas, OpcionesJson);
                     var fechaDeteccion = DateTime.Now;
-                    var titulo = $"Productos/lotes sin venta: {filas.Count}";
+                    var titulo = $"Productos sin venta: {filas.Count}";
                     var mensaje = CrearMensajeIntranet(filas, fechaReferencia, diasAtras);
                     var resultado = await repo.RegistrarNotificacionIntranetAsync(
                         _rutina.CodigoRutina,
@@ -380,7 +403,7 @@ public sealed class Worker : BackgroundService
             }
             else if (omitirNotificacionIntranet)
             {
-                _logger.LogInformation("La notificación intranet está omitida para esta ejecución de prueba.");
+                _logger.LogInformation("La notificación intranet está omitida para esta ejecución.");
             }
             else
             {
@@ -426,7 +449,7 @@ public sealed class Worker : BackgroundService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Falló la ejecución de productos/lotes sin venta.");
+            _logger.LogError(ex, "Falló la ejecución de productos sin venta.");
         }
         finally
         {
@@ -437,15 +460,40 @@ public sealed class Worker : BackgroundService
     }
 
     private string CrearMensajeIntranet(
-        IReadOnlyList<ProductoLoteSinVenta> filas,
+        IReadOnlyList<ProductoSinVenta> filas,
         DateTime fechaReferencia,
         int diasAtras)
     {
-        var encabezado = $"Se detectaron {filas.Count} producto(s)/lote(s) admitidos el {fechaReferencia.AddDays(-diasAtras):yyyy-MM-dd} sin venta durante {diasAtras} día(s). Detalle: ";
-        var detalle = string.Join("; ", filas.Select(x => $"{x.Codigo} - lote {x.Lote}"));
-        const int maximo = 1000;
-        var texto = encabezado + detalle;
-        return texto.Length <= maximo ? texto : texto[..(maximo - 3)] + "...";
+        if (filas == null || filas.Count == 0)
+            return "No se encontraron productos sin venta.";
+
+        var cantidad = filas.Count;
+
+        var encabezado =
+            $"Se detectaron {cantidad} productos con stock disponible " +
+            $"que no registran ventas durante los últimos {diasAtras} días.";
+
+        var recomendacion =
+            "Te recomendamos revisar su inventario y evaluar acciones " +
+            "para mejorar la rotación de estos productos.";
+
+        var codigos = filas
+            .Select(x => x.Codigo)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct()
+            .Take(15)
+            .ToList();
+
+        var detalle = codigos.Count > 0
+            ? $"Algunos productos detectados: {string.Join(", ", codigos)}"
+            : "No se encontraron códigos de productos disponibles.";
+
+        var restantes = cantidad - codigos.Count;
+
+        if (restantes > 0)
+            detalle += $" y {restantes} producto(s) más.";
+
+        return $"{encabezado}\n\n{recomendacion}\n\n{detalle}";
     }
 }
 

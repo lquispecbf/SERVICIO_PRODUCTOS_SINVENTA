@@ -26,7 +26,7 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
     }
 
     public async Task<bool> EnviarAsync(
-        IReadOnlyList<ProductoLoteSinVenta> productos,
+        IReadOnlyList<ProductoSinVenta> productos,
         IReadOnlyList<SuscriptorCorreoDTO> destinatarios,
         DateTime fechaReferencia,
         CancellationToken cancellationToken)
@@ -48,7 +48,7 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
             using var mensaje = new MailMessage
             {
                 From = new MailAddress(_smtp.From.Trim(), _smtp.FromName),
-                Subject = $"Alerta: {productos.Count} productos/lotes sin venta",
+                Subject = $"Alerta: {productos.Count} productos sin venta",
                 Body = ConstruirHtml(productos, fechaReferencia),
                 IsBodyHtml = true,
                 SubjectEncoding = Encoding.UTF8,
@@ -99,11 +99,16 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
 
 
 
-    private string ConstruirHtml(IReadOnlyList<ProductoLoteSinVenta> productos, DateTime fechaReferencia)
+
+    private string ConstruirHtml(
+        IReadOnlyList<ProductoSinVenta> productos,
+        DateTime fechaReferencia)
     {
         var sb = new StringBuilder();
 
         sb.Append("<!DOCTYPE html><html lang='es'><head><meta charset='utf-8'>");
+
+        sb.Append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
 
         sb.Append("<style>");
         sb.Append(@"
@@ -112,7 +117,7 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
             color: #34495e;
             background-color: #f4f6f8;
             margin: 0;
-            padding: 25px;
+            padding: 15px;
         }
 
         .container {
@@ -144,53 +149,88 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
         }
 
         .content {
-            padding: 25px;
+            padding: 20px;
         }
 
         .description {
             font-size: 14px;
             color: #667781;
             margin-bottom: 20px;
+            line-height: 1.6;
         }
 
-        table {
+        /* CONTENEDOR SCROLL */
+        .tabla-scroll {
             width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid #e5eaea;
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+
+        /* TABLA CON ANCHO FIJO */
+        .tabla-productos {
+            width: 100%;
+            min-width: 0;
+            table-layout: auto;
             border-collapse: collapse;
             font-size: 13px;
+            background-color: #ffffff;
         }
 
-        thead th {
+        .tabla-productos thead th {
             background: #1ab394;
             color: white;
             padding: 13px 10px;
             text-align: left;
             font-weight: 600;
             border: 1px solid #18a689;
+            white-space: nowrap;
         }
 
-        tbody td {
+        .tabla-productos tbody td {
             padding: 11px 10px;
             border-bottom: 1px solid #e9eeee;
             color: #34495e;
+            vertical-align: middle;
         }
 
-        tbody tr:nth-child(even) {
+        .tabla-productos tbody tr:nth-child(even) {
             background-color: #f5f9f8;
         }
 
         .codigo {
             font-weight: 600;
             color: #263746;
+            white-space: nowrap;
+        }
+
+        .producto {
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-break: normal;
+            line-height: 1.5;
         }
 
         .dias {
             font-weight: 600;
             color: #d17a22;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .unidad {
+            white-space: nowrap;
         }
 
         .stock {
             font-weight: 600;
             color: #1ab394;
+            text-align: right;
+            white-space: nowrap;
         }
 
         .footer {
@@ -205,6 +245,34 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
         .footer p {
             margin: 5px 0;
         }
+
+        /* AJUSTES PARA CELULARES */
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 5px;
+            }
+
+            .content {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 18px 15px;
+            }
+
+            .header h2 {
+                font-size: 20px;
+            }
+
+            .description {
+                font-size: 13px;
+            }
+
+            .tabla-productos {
+                width: 1150px;
+                min-width: 1150px;
+            }
+        }
     ");
         sb.Append("</style></head><body>");
 
@@ -212,7 +280,7 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
 
         // ENCABEZADO
         sb.Append("<div class='header'>");
-        sb.Append("<h2>Productos y lotes sin venta</h2>");
+        sb.Append("<h2>Productos sin venta</h2>");
         sb.Append("<p>Reporte de control y seguimiento de inventario</p>");
         sb.Append("</div>");
 
@@ -220,53 +288,66 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
         sb.Append("<div class='content'>");
 
         sb.Append("<p class='description'>");
-        sb.Append("A continuación, se presenta el listado de productos y lotes ");
+        sb.Append("A continuación, se presenta el listado de productos ");
         sb.Append("que no registran ventas durante el período de evaluación.");
         sb.Append("</p>");
 
-        // TABLA
-        sb.Append("<table>");
+        // TABLA CON SCROLL HORIZONTAL
+        sb.Append("<div class='tabla-scroll' ");
+        sb.Append("style='width:100%; max-width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;'>");
+
+        sb.Append("<table class='tabla-productos' ");
+        sb.Append("style='width:1150px; min-width:1150px; table-layout:fixed; border-collapse:collapse;'>");
+
         sb.Append("<thead><tr>");
-        sb.Append("<th>Código</th>");
-        sb.Append("<th>Producto</th>");
-        sb.Append("<th>Lote</th>");
-        sb.Append("<th>Fecha de admisión</th>");
-        sb.Append("<th>Días sin venta</th>");
-        sb.Append("<th>Stock</th>");
+
+        sb.Append("<th style='width:120px;'>CÓDIGO</th>");
+        sb.Append("<th style='width:300px;'>PRODUCTO</th>");
+        sb.Append("<th style='width:120px; text-align:center;'>DÍAS SIN VENTA</th>");
+        sb.Append("<th style='width:150px; text-align:center; vertical-align:middle;'>U.M.</th>");
+        sb.Append("<th style='width:1%; text-align:center; vertical-align:middle; white-space:nowrap;'>STOCK CAJAS</th>");
+        sb.Append("<th style='width:1%; text-align:center; vertical-align:middle; white-space:nowrap;'>COSTO CAJAS</th>");
+        sb.Append("<th style='width:1%; text-align:center; vertical-align:middle; white-space:nowrap;'>VALORIZACIÓN</th>");
         sb.Append("</tr></thead><tbody>");
 
         foreach (var item in productos)
         {
             sb.Append("<tr>");
 
-            sb.Append("<td class='codigo'>")
+            sb.Append("<td class='codigo' style='width:120px; white-space:nowrap;'>")
                 .Append(WebUtility.HtmlEncode(item.Codigo))
                 .Append("</td>");
 
-            sb.Append("<td>")
+            sb.Append("<td class='producto' style='width:300px; overflow-wrap:break-word; word-break:normal;'>")
                 .Append(WebUtility.HtmlEncode(item.Producto))
                 .Append("</td>");
 
-            sb.Append("<td>")
-                .Append(WebUtility.HtmlEncode(item.Lote))
-                .Append("</td>");
-
-            sb.Append("<td>")
-                .Append(item.FechaIngreso.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))
-                .Append("</td>");
-
-            sb.Append("<td class='dias'>")
+            sb.Append("<td class='dias' style='width:120px; text-align:center; white-space:nowrap;'>")
                 .Append(item.DiasSinVenta.ToString(CultureInfo.InvariantCulture))
                 .Append("</td>");
 
-            sb.Append("<td class='stock'>")
-                .Append(item.Stock.ToString("0.####", CultureInfo.InvariantCulture))
+            sb.Append("<td class='unidad' style='width:150px; text-align:center; vertical-align:middle; white-space:nowrap;'>")
+                .Append(WebUtility.HtmlEncode(item.UnidadMedida))
+                .Append("</td>");
+
+            sb.Append("<td class='stock' style='width:1%; text-align:center; vertical-align:middle; white-space:nowrap;'>")
+                .Append(FormatearOpcional(item.StockCajas, "0.####"))
+                .Append("</td>");
+
+            sb.Append("<td class='stock' style='width:1%; text-align:center; vertical-align:middle; white-space:nowrap;'>")
+                .Append(FormatearOpcional(item.CostoPorCaja, "0.00"))
+                .Append("</td>");
+
+            sb.Append("<td class='stock' style='width:1%; text-align:center; vertical-align:middle; white-space:nowrap;'>")
+                .Append(FormatearOpcional(item.Valorizacion, "0.00"))
                 .Append("</td>");
 
             sb.Append("</tr>");
         }
 
         sb.Append("</tbody></table>");
+        sb.Append("</div>");
+
         sb.Append("</div>");
 
         // FOOTER
@@ -280,5 +361,7 @@ public sealed class EmailSenderProductos : IEmailSenderProductos
         return sb.ToString();
     }
 
+    private static string FormatearOpcional(decimal? valor, string formato) =>
+        valor?.ToString(formato, CultureInfo.InvariantCulture) ?? "N/D";
 
 }

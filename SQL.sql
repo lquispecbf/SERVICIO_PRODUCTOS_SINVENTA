@@ -28,41 +28,62 @@ BEGIN
     DECLARE @SQL                    NVARCHAR(MAX);
     DECLARE @SQL_HANA               NVARCHAR(MAX);
     DECLARE @ESQUEMA                NVARCHAR(100);
-    DECLARE @DIAS_TEXTO             NVARCHAR(11);
-    DECLARE @FECHA_REFERENCIA_TEXTO NVARCHAR(10);
+    DECLARE @FECHA_INICIO_TEXTO     NVARCHAR(10);
+    DECLARE @FECHA_FIN_TEXTO        NVARCHAR(10);
 
     SET @ESQUEMA = LTRIM(RTRIM(@BD_HANA));
-    SET @DIAS_TEXTO = CONVERT(NVARCHAR(11), @DIAS_ATRAS);
-    SET @FECHA_REFERENCIA_TEXTO = CONVERT(NVARCHAR(10), @FECHA_REFERENCIA, 23);
+    SET @FECHA_INICIO_TEXTO = CONVERT(NVARCHAR(10), DATEADD(DAY, -@DIAS_ATRAS, @FECHA_REFERENCIA), 23);
+    SET @FECHA_FIN_TEXTO = CONVERT(NVARCHAR(10), DATEADD(DAY, 1, @FECHA_REFERENCIA), 23);
 
     SET @SQL_HANA = N'
         SELECT
-            Q."ItemCode" AS "CODIGO",
+            W."ItemCode" AS "CODIGO",
             I."ItemName" AS "PRODUCTO",
-            B."DistNumber" AS "LOTE",
-            B."InDate" AS "FECHA_INGRESO",
-            Q."Quantity" AS "STOCK"
-        FROM "' + @ESQUEMA + N'"."OBTQ" Q
-        INNER JOIN "' + @ESQUEMA + N'"."OBTN" B
-            ON B."AbsEntry" = Q."MdAbsEntry"
-           AND B."ItemCode" = Q."ItemCode"
+            I."BuyUnitMsr" AS "UNIDAD_MEDIDA",
+            W."OnHand" AS "STOCK_UNIDADES",
+            CASE
+                WHEN COALESCE(I."NumInBuy", 0) > 0
+                    THEN W."OnHand" / I."NumInBuy"
+                ELSE NULL
+            END AS "STOCK_CAJAS",
+            CASE
+                WHEN COALESCE(I."NumInBuy", 0) > 0
+                    THEN W."AvgPrice" * I."NumInBuy"
+                ELSE NULL
+            END AS "COSTO_X_CAJA",
+            CASE
+                WHEN COALESCE(I."NumInBuy", 0) > 0
+                    THEN (W."OnHand" / I."NumInBuy") * (W."AvgPrice" * I."NumInBuy")
+                ELSE NULL
+            END AS "VALORIZACION"
+        FROM "' + @ESQUEMA + N'"."OITW" W
         INNER JOIN "' + @ESQUEMA + N'"."OITM" I
-            ON I."ItemCode" = Q."ItemCode"
-        WHERE Q."WhsCode" = ''ALM-01''
-          AND Q."Quantity" > 0
-          AND COALESCE(Q."CommitQty", 0) <= 0
-          AND B."InDate" = ADD_DAYS(
-                TO_DATE(''' + @FECHA_REFERENCIA_TEXTO + N''', ''YYYY-MM-DD''),
-                -' + @DIAS_TEXTO + N')
+            ON I."ItemCode" = W."ItemCode"
+        WHERE W."WhsCode" = ''ALM-01''
+          AND W."OnHand" > 0
           AND NOT EXISTS
           (
               SELECT 1
-              FROM "' + @ESQUEMA + N'"."IBT1" V
-              WHERE V."ItemCode" = Q."ItemCode"
-                AND V."BatchNum" = B."DistNumber"
-                AND V."WhsCode" = Q."WhsCode"
-                AND V."Direction" = ''1''
-                AND V."BaseType" IN (13, 15)
+              FROM "' + @ESQUEMA + N'"."OINV" H
+              INNER JOIN "' + @ESQUEMA + N'"."INV1" L
+                  ON L."DocEntry" = H."DocEntry"
+              WHERE L."ItemCode" = W."ItemCode"
+                AND L."WhsCode" = W."WhsCode"
+                AND H."CANCELED" = ''N''
+                AND H."DocDate" >= TO_DATE(''' + @FECHA_INICIO_TEXTO + N''', ''YYYY-MM-DD'')
+                AND H."DocDate" < TO_DATE(''' + @FECHA_FIN_TEXTO + N''', ''YYYY-MM-DD'')
+          )
+          AND NOT EXISTS
+          (
+              SELECT 1
+              FROM "' + @ESQUEMA + N'"."ODLN" H
+              INNER JOIN "' + @ESQUEMA + N'"."DLN1" L
+                  ON L."DocEntry" = H."DocEntry"
+              WHERE L."ItemCode" = W."ItemCode"
+                AND L."WhsCode" = W."WhsCode"
+                AND H."CANCELED" = ''N''
+                AND H."DocDate" >= TO_DATE(''' + @FECHA_INICIO_TEXTO + N''', ''YYYY-MM-DD'')
+                AND H."DocDate" < TO_DATE(''' + @FECHA_FIN_TEXTO + N''', ''YYYY-MM-DD'')
           )
     ';
 
@@ -70,53 +91,20 @@ BEGIN
         SELECT
             R.CODIGO,
             R.PRODUCTO,
-            R.LOTE,
-            R.FECHA_INGRESO,
-            R.STOCK
+            R.UNIDAD_MEDIDA,
+            R.STOCK_CAJAS,
+            R.COSTO_X_CAJA,
+            R.VALORIZACION
         FROM OPENQUERY(SAP, '''
         + REPLACE(@SQL_HANA, '''', '''''')
         + N''') AS R
-        ORDER BY R.PRODUCTO, R.LOTE;
+        ORDER BY R.PRODUCTO, R.CODIGO;
     ';
 
     EXEC sys.sp_executesql @SQL;
 END;
 GO
 
--- Prueba manual usando la fecha actual del equipo SQL:
--- EXEC dbo.SP_BUSCAR_PRODUCTOS_LOTES_SIN_VENTAS 'SBO_CBF', 3;
--- Prueba simulando el día de referencia:
--- EXEC dbo.SP_BUSCAR_PRODUCTOS_LOTES_SIN_VENTAS 'SBO_CBF', 3, '2026-11-08';
--- ============================================================================
--- Configuración y registro de notificaciones de intranet para PRODUCTOS_SINVENTA
--- Ejecutar en la base CBF_TEST, que contiene ALERTA_RUTINA y las tablas de alertas.
--- ============================================================================
-CREATE OR ALTER PROCEDURE dbo.SP_OBTENER_CONFIG_RUTINA
-    @CODIGO_RUTINA VARCHAR(50)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT TOP (1)
-        CONVERT(BIT, CASE WHEN R.HABILITADO = 1 AND R.ESTADO = 1 THEN 1 ELSE 0 END) AS HABILITADO,
-        ISNULL(R.DIAS_ATRAS, 3) AS DIAS_ATRAS,
-        R.CANAL_CORREO,
-        R.CANAL_INTRANET
-    FROM dbo.ALERTA_RUTINA AS R
-    WHERE R.CODIGO_RUTINA = @CODIGO_RUTINA;
-END;
-GO
-
-CREATE OR ALTER PROCEDURE dbo.SP_OBTENER_VERSION_CONFIG_ALERTAS
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT TOP (1) VERSION_CONFIG
-    FROM dbo.ALERTA_CONFIGURACION_GLOBAL
-    WHERE ID_CONFIG = 1;
-END;
-GO
 CREATE OR ALTER PROCEDURE dbo.SP_REGISTRAR_ALERTA_PRODUCTOS_SINVENTA
     @CODIGO_RUTINA          VARCHAR(50),
     @FECHA_REFERENCIA       DATE,
@@ -238,7 +226,7 @@ BEGIN
                 NULL,
                 NULL,
                 'PRODUCTOS_SINVENTA',
-                CONCAT(@CANTIDAD_PRODUCTOS, ' producto(s)/lote(s) sin venta'),
+                CONCAT(@CANTIDAD_PRODUCTOS, ' producto(s) sin venta'),
                 0,
                 0,
                 0,

@@ -5,7 +5,7 @@ namespace PRODUCTOS_SINVENTA.Services;
 public interface IEmailSenderProductos
 {
     Task<bool> EnviarAsync(
-        IReadOnlyList<ProductoLoteSinVenta> productos,
+        IReadOnlyList<ProductoSinVenta> productos,
         IReadOnlyList<SuscriptorCorreoDTO> destinatarios,
         DateTime fechaReferencia,
         CancellationToken cancellationToken);
